@@ -1,0 +1,161 @@
+'Webmail Providers', 2350
+'PayPal Inc.', 1733
+'Bank of America', 1187
+'DHL Airways/ Inc.', 1071
+'Generic/Spear Phishing', 1022
+'Office365', 751
+'Yahoo! Inc', 588
+'Microsoft OneDrive', 272
+'Free ISP', 254
+'DGI French Tax Authority', 232
+'Dropbox/ Inc.', 183
+'Match', 183
+'Netflix Inc.', 181
+'Outlook', 175
+'Canadian Imperial Bank of Commerce', 170
+'AT&T Inc.', 149
+'Chase Personal Banking', 149
+'Stripe', 136
+'Facebook/ Inc.', 135
+'First Investment Bank', 131
+'Apple Inc.', 129
+'International Card Services B.V', 124
+'eBay Inc.', 123
+'Wells Fargo & Company', 122
+'Google Inc.', 98
+'Alibaba', 97
+'ADP/ LLC', 84
+'Cox Communications', 76
+'OurTime Dating', 76
+'Spectrum', 75
+'Adobe Inc.', 70
+'ATB Financial', 70
+'LinkedIn Corporation', 68
+'Amazon.com Inc.', 67
+'Societe Generale', 62
+'DocuSign', 58
+'Absa Group', 56
+'WeTransfer', 52
+'1&1 Ionos', 47
+'RuneScape', 39
+'Poste Italiane S.p.A', 37
+'AOL Inc.', 36
+'Comcast Corporation', 34
+'GoDaddy', 30
+'Simplii Financial', 30
+'Ooredoo QSC', 29
+'RBC Royal Bank', 29
+'Itau Unibanco S.A', 28
+'Swisscom IT Services AG', 26
+'U.S. Bank', 25
+'Westpac Institutional Banking', 25
+'Credit Agricole S.A.', 24
+'Swiss Post', 24
+'French Health Insurance', 23
+'United Services Automobile Association', 23
+'Spotify', 22
+'National Bank of Canada', 21
+'TPG Telecom', 20
+'WhatsApp', 20
+'SunTrust Bank', 18
+'Bank of Montreal', 17
+'Zoopla', 17
+'Bouygues Telecom', 16
+'Deutsche Telekom', 16
+'Navy Federal Credit Union', 16
+'Spark New Zealand', 16
+'T-Online', 15
+'Grupo Santander', 14
+'Orange', 14
+'Scotiabank', 14
+'Bank of New Zealand', 13
+'EarthLink', 13
+'TradeKey', 13
+'Bet365', 12
+'CaixaBank', 12
+'Cembra Money Bank AG', 12
+'PostFinance', 12
+'Sparkasse Bank', 12
+'National Australia Bank Limited', 11
+'American Express', 10
+'ASB Bank Limited', 10
+'Key Bank', 10
+'M & T Bank Coporation', 10
+'UBS AG', 10
+'Alaska USA Federal Credit Union', 9
+'Cairo Amman Bank', 9
+'Etisalat', 9
+'Global Sources HK', 9
+'Landesbank Berlin AG', 9
+'Suncorp Metway Limited', 9
+'TD Bank Group', 9
+'MyEtherWallet', 8
+'Banco del Estado de Chile', 7
+'Equa bank', 7
+'MWeb', 7
+'SNS Bank N.V.', 7
+'AutoScout24', 6
+'Banco do Brasil S.A.', 6
+'Blockchain', 6
+'Digital Federal Credit Union', 6
+'ICICI Bank Limited', 6
+'MBNA Corportation', 6
+'Ziggo Holding B.V.', 6
+'Bank Al Habib', 5
+'Desjardins', 5
+'Luno', 5
+'POF', 5
+'Vodafone', 5
+'Aruba S.p.A.', 4
+'ING', 4
+'NetEase', 4
+'Rackspace', 4
+'Sakura Internet', 4
+'Allegro', 3
+'Bankia', 3
+'BT Group plc', 3
+'Chronopost International', 3
+'Senior People Meet', 3
+'Suncorp Group', 3
+'Verizon Wireless', 3
+'Americanas.com S/A Comercio Electrnico', 2
+'Bank of Scotland', 2
+'Citrix ShareFile', 2
+'Emirates NBD', 2
+'Frontier Communications', 2
+'IRS', 2
+'Mastercard International Incorporated', 2
+'Mobile.de', 2
+'NatWest Personal Banking', 2
+'Singtel Optus', 2
+'SOCIETE FRANCAISE DU RADIOTELEPHONE', 2
+'Telekom Brunei', 2
+'Telus', 2
+'Webmail Provider', 2
+'Banco de Chile', 1
+'Bank of The Bahamas Limited', 1
+'Belize Bank', 1
+'BH Telecom', 1
+'BZSt', 1
+'Credit du Nord', 1
+'Credit Suisse AG', 1
+'Daum', 1
+'Delta Air Lines', 1
+'Discover', 1
+'Enel Energia S.p.A', 1
+'Government of Canada', 1
+'IBC Bank', 1
+'Kiwibank Limited', 1
+'Made-In-China', 1
+'Maersk', 1
+'Monmouth Telecom', 1
+'Naver', 1
+'Online Services', 1
+'SF Express Co.', 1
+'Square/ Inc.', 1
+'Standard Chartered Bank', 1
+'Steam', 1
+'Telstra Corporation Limited', 1
+'The Vanguard Group', 1
+'URSSAF', 1
+'Visa International Service Association', 1
