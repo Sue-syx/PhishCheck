@@ -25,7 +25,7 @@ def Train():
     # NetSet
     net = SiameseNetwork().cuda()
     criterion = ContrastiveLoss()
-    optimizer = optim.Adam(filter(lambda p: p.requires_grad, net.parameters()), lr=0.00001)
+    optimizer = optim.Adam(filter(lambda p: p.requires_grad, net.parameters()), lr=Config.learning_rate)
 
     # TrainSet
     folder_dataset = dset.ImageFolder(root=Config.training_dir)
