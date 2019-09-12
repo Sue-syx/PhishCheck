@@ -9,8 +9,8 @@ import os
 import cv2 as cv
 
 def Divide():
-    rootpath = "D:/yuxuan/ImgSim/PhishingCheck/ImgSim/Siamese Network/Dataset/Resnet50/database"
-    newpath = "D:/yuxuan/ImgSim/PhishingCheck/ImgSim/Siamese Network/Dataset/Resnet50/"
+    rootpath = "D:/yuxuan/ImgSim/PhishingCheck/ImgSim/Siamese Network/Dataset/dataset-resize/database"
+    newpath = "D:/yuxuan/ImgSim/PhishingCheck/ImgSim/Siamese Network/Dataset/dataset-resize/"
     for root, dirs, files in os.walk(rootpath):
         c = 0
         for dir_ in dirs:      
