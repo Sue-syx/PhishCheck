@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
-def imshow(img, text=None, should_save=False):
+
+def imshow(img, text=None):
     npimg = img.numpy()
     plt.axis("off")
     if text:
@@ -19,4 +21,7 @@ def show_plot(iteration, loss, loss_test):
 
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
+    if not os.path.exists("fig"):
+        os.makedirs("fig")
+    plt.savefig("fig/loss.png")
     plt.show()

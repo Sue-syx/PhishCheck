@@ -8,12 +8,14 @@ import torchvision.transforms as transforms
 
 
 class Config():
-    training_dir = "../dataset-resize/training/"
-    testing_dir = "../dataset-resize/testing/"
+    training_dir = "../dataset-origin/mix_train/"
+    testing_dir = "../dataset-origin/mix_test/"
     targetlist_dir = "C:/Users/yuxuan/1Project/SiameseNetwork_jupy/targetlist/targetlist"
     phish_dir = "C:/Users/yuxuan/1Project/SiameseNetwork_jupy/argetlist/phish"
     train_batch_size = 64
     train_number_epochs = 100
+    learning_rate = 0.0001
+
 
 class SiameseNetworkDataset(Dataset):
 
@@ -23,7 +25,6 @@ class SiameseNetworkDataset(Dataset):
         self.should_invert = should_invert
 
     def __getitem__(self, index):
-
         img0_tuple = random.choice(self.imageFolderDataset.imgs)
         # we need to make sure approx 50% of images are in the same class
         should_get_same_class = random.randint(0, 1)
@@ -31,7 +32,7 @@ class SiameseNetworkDataset(Dataset):
             while True:
                 # keep looping till the same class image is found
                 img1_tuple = random.choice(self.imageFolderDataset.imgs)
-                if img0_tuple[1] == img1_tuple[1] and img0_tuple[0] != img1_tuple[0]:
+                if img0_tuple[1] == img1_tuple[1]:
                     break
         else:
             while True:
@@ -39,20 +40,23 @@ class SiameseNetworkDataset(Dataset):
                 img1_tuple = random.choice(self.imageFolderDataset.imgs)
                 if img0_tuple[1] != img1_tuple[1]:
                     break
-        img0 = Image.open(img0_tuple[0])
-        img1 = Image.open(img1_tuple[0])
-        img0 = img0.convert("L")
-        img1 = img1.convert("L")
+        open_image0 = Image.open(img0_tuple[0])
+        open_image1 = Image.open(img1_tuple[0])
+        rgb_img0 = open_image0.convert("L")
+        rgb_img1 = open_image1.convert("L")
+        img0 = rgb_img0
+        img1 = rgb_img1
         if self.should_invert:
-            img0 = PIL.ImageOps.invert(img0)
-            img1 = PIL.ImageOps.invert(img1)
+            img0 = PIL.ImageOps.invert(rgb_img0)
+            img1 = PIL.ImageOps.invert(rgb_img1)
         if self.transform is not None:
-            img0 = self.transform(img0)
-            img1 = self.transform(img1)
+            img0 = self.transform(rgb_img0)
+            img1 = self.transform(rgb_img1)
         transform = transforms.Compose([transforms.Resize((100, 100)), transforms.ToTensor()])
         img0 = transform(img0)
         img1 = transform(img1)
-        return img0, img1, torch.from_numpy(np.array([int(img1_tuple[1] != img0_tuple[1])], dtype=np.float32))
+        label = torch.from_numpy(np.array([int(img1_tuple[1] != img0_tuple[1])], dtype=np.float32))
+        return img0_tuple[0], img1_tuple[0], img0, img1, label
 
     def __len__(self):
         return len(self.imageFolderDataset.imgs)

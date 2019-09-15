@@ -13,7 +13,7 @@ class Config():
     targetlist_dir = "C:/Users/yuxuan/1Project/SiameseNetwork_jupy/targetlist/targetlist"
     phish_dir = "C:/Users/yuxuan/1Project/SiameseNetwork_jupy/argetlist/phish"
     train_batch_size = 64
-    train_number_epochs = 20
+    train_number_epochs = 100
     learning_rate = 0.0001
 
 

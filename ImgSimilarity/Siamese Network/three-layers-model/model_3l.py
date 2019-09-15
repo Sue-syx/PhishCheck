@@ -18,27 +18,20 @@ class SiameseNetwork(nn.Module):
             nn.BatchNorm2d(8),
 
             nn.ReflectionPad2d(1),
-            nn.Conv2d(8, 16, kernel_size=3),
+            nn.Conv2d(8, 8, kernel_size=3),
             nn.ReLU(inplace=True),
-            nn.BatchNorm2d(16),
+            nn.BatchNorm2d(8),
 
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(16, 16, kernel_size=3),
-            nn.ReLU(inplace=True),
-            nn.BatchNorm2d(16),
         )
 
         self.fc1 = nn.Sequential(
-            nn.Linear(16 * 100 * 100, 1000),
+            nn.Linear(8 * 100 * 100, 1000),
             nn.ReLU(inplace=True),
 
             nn.Linear(1000, 500),
             nn.ReLU(inplace=True),
 
-            nn.Linear(500, 500),
-            nn.ReLU(inplace=True),
-
-            nn.Linear(500, 10))
+            nn.Linear(500, 100))
 
     def forward_once(self, x):
         output = self.cnn1(x)
@@ -60,11 +53,15 @@ class ContrastiveLoss(torch.nn.Module):
 
     def forward(self, output1, output2, label):
         euclidean_distance = F.pairwise_distance(output1, output2, keepdim=True)
-        loss_contrastive = torch.mean((1 - label) * torch.pow(euclidean_distance, 2) +
-                                      (label) * torch.pow(torch.clamp(
-            self.margin - euclidean_distance, min=0.0), 2))
-        return loss_contrastive
+        # loss_contrastive = torch.mean((1 - label) * torch.pow(euclidean_distance, 2) +
+        #                               (label) * torch.pow(torch.clamp(
+        #     self.margin - euclidean_distance, min=0.0), 2))
 
+        loss_contrastive = torch.mean(
+            (1 - label) * 10 * torch.pow(euclidean_distance, 2) +
+            (label) * 50 / (torch.clamp(euclidean_distance, max=8) + 0.00001)
+        )
+        return loss_contrastive
 
 # class CNN(nn.Module):
 #

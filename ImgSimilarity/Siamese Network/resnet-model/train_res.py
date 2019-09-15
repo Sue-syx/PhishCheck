@@ -11,6 +11,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
+import os
+
 from dataset_res import Config, SiameseNetworkDataset, TestYOLO_Dataset
 from model_res import SiameseNetwork, ContrastiveLoss
 from visualization_res import imshow, show_plot
@@ -18,7 +20,6 @@ from visualization_res import imshow, show_plot
 
 # ============================Train=========================================
 def Train():
-
     random.seed(10)
     torch.manual_seed(10)
 
@@ -116,18 +117,47 @@ def ScatterVisualization(net, dataset, range_):
     for k in range(0, range_):
         for i, data in enumerate(test_dataloader, 0):
             img_str0, img_str1, x0, x1, label = data
-            # concatenated = torch.cat((x0, x1), 0)
             output1, output2 = net(Variable(x0).cuda(), Variable(x1).cuda())
             euclidean_distance = F.pairwise_distance(output1, output2)
 
             x = 3 * np.random.rand(1)
             y = euclidean_distance.item()
+
+            img0 = transforms.ToPILImage()(x0.squeeze(0))
+            img1 = transforms.ToPILImage()(x1.squeeze(0))
+
             if label == 0:
                 plt.scatter(x, y, marker='.', color='c', s=10)
+                if euclidean_distance < 2:
+                    # print(img_str0, img_str1, euclidean_distance)
+                    pathname = "same_euclidean_true/" + str((i + 1) * (k + 1)) + "+" + str(y) + "/"
+                    if not os.path.exists(pathname):
+                        os.makedirs(pathname)
+                    img0.save(pathname + "1.png")
+                    img1.save(pathname + "2.png")
+                else:
+                    pathname = "same_euclidean_false/" + str((i + 1) * (k + 1)) + "+" + str(y) + "/"
+                    if not os.path.exists(pathname):
+                        os.makedirs(pathname)
+                    img0.save(pathname + "1.png")
+                    img1.save(pathname + "2.png")
+
             elif label == 1:
                 plt.scatter(x, y, marker='.', color='r', s=10)
                 if euclidean_distance < 2:
-                    print(img_str0, img_str1, euclidean_distance)
+                    # print(img_str0, img_str1, euclidean_distance)
+                    pathname = "diff_euclidean_false/" + str((i + 1) * (k + 1)) + "+" + str(y) + "/"
+                    if not os.path.exists(pathname):
+                        os.makedirs(pathname)
+                    img0.save(pathname + "1.png")
+                    img1.save(pathname + "2.png")
+                else:
+                    pathname = "diff_euclidean_true/" + str((i + 1) * (k + 1)) + "+" + str(y) + "/"
+                    if not os.path.exists(pathname):
+                        os.makedirs(pathname)
+                    img0.save(pathname + "1.png")
+                    img1.save(pathname + "2.png")
+
     plt.savefig(figname)
     plt.show()
 
