@@ -53,10 +53,25 @@ def Train():
     loss_test = []
     iteration_number = 0
 
+    dict_img = {}
+    dict_freq = {}
+    dict_pair = {}
+
     for epoch in range(0, Config.train_number_epochs):
+        count = 0
         for i, data in enumerate(train_dataloader, 0):
+            count = count + 1
             img_str0, img_str1, img0, img1, label = data
+
+            update_dict_pair(dict_pair, img_str0, img_str1, img0, img1)
+            update_dict_img(dict_img, img_str0, img0)
+            update_dict_img(dict_img, img_str1, img1)
+
             img0, img1, label = img0.cuda(), img1.cuda(), label.cuda()
+
+            update_dict_freq(dict_freq, img_str0)
+            update_dict_freq(dict_freq, img_str1)
+
             optimizer.zero_grad()
             output1, output2 = net(img0, img1)
             loss_contrastive = criterion(output1, output2, label)
@@ -80,9 +95,33 @@ def Train():
                 print(" Test loss {}\n".format(loss_t / len(test_dataloader)))
                 loss_test.append(loss_t / len(test_dataloader))
 
-    show_plot(counter, loss_history, loss_test)
-    return net
+        print("iteration number", count)
 
+    show_plot(counter, loss_history, loss_test)
+    return net, dict_img, dict_freq, dict_pair
+
+
+def update_dict_pair(dict_pair, img_str0, img_str1, img0, img1):
+    for i in range(len(img_str0)):
+        key = img_str0[i] + '&' + img_str1[i]
+        value = (img0[i], img1[i])
+        dict_pair[key] = value
+
+
+def update_dict_freq(dict_freq, img_str):
+    for i in range(len(img_str)):
+        key = img_str[i]
+        if key in dict_freq:
+            dict_freq[key] = dict_freq[key] + 1
+        else:
+            dict_freq[key] = 1
+
+
+def update_dict_img(dict_img, img_str, img):
+    for i in range(len(img_str)):
+        key = img_str[i]
+        value = img[i]
+        dict_img[key] = value
 
 # =================================Test=======================================
 def Test(net):
@@ -102,65 +141,80 @@ def Test(net):
 
 
 # ==============================ScatterVisualization=====================================
-def ScatterVisualization(net, dataset, range_):
+def ScatterVisualization(net, dict_img, dict_pair, dataset, range_, ):
     if dataset == "train":
-        folder_dataset_test = dset.ImageFolder(root=Config.training_dir)
+        # folder_dataset_test = dset.ImageFolder(root=Config.training_dir)
         figname = "fig/train.png"
     elif dataset == "test":
-        folder_dataset_test = dset.ImageFolder(root=Config.testing_dir)
+        # folder_dataset_test = dset.ImageFolder(root=Config.testing_dir)
         figname = "fig/test.png"
-    siamese_dataset = SiameseNetworkDataset(imageFolderDataset=folder_dataset_test,
-                                            should_invert=False)
-    test_dataloader = DataLoader(siamese_dataset, num_workers=0, batch_size=1, shuffle=True)
+    # siamese_dataset = SiameseNetworkDataset(imageFolderDataset=folder_dataset_test,
+    #                                         should_invert=False)
+    # test_dataloader = DataLoader(siamese_dataset, num_workers=0, batch_size=1, shuffle=True)
 
     plt.figure()
-    for k in range(0, range_):
-        for i, data in enumerate(test_dataloader, 0):
-            img_str0, img_str1, x0, x1, label = data
-            output1, output2 = net(Variable(x0).cuda(), Variable(x1).cuda())
-            euclidean_distance = F.pairwise_distance(output1, output2)
+    # for k in range(0, range_):
+    for index, key in enumerate(dict_pair):
+        value = dict_pair[key]
+        img0_path = key[:key.find("&")]
+        tmp_x0 = value[0]
+        img1_path = key[key.find("&")+1:]
+        tmp_x1 = value[1]
 
-            x = 3 * np.random.rand(1)
-            y = euclidean_distance.item()
+        x0 = torch.rand(1, 3, 100, 100)
+        x0[0] = tmp_x0
+        x1 = torch.rand(1, 3, 100, 100)
+        x1[0] = tmp_x1
 
-            img0 = transforms.ToPILImage()(x0.squeeze(0))
-            img1 = transforms.ToPILImage()(x1.squeeze(0))
+        # img_str0, img_str1, x0, x1, label = data
+        output1, output2 = net(Variable(x0).cuda(), Variable(x1).cuda())
+        euclidean_distance = F.pairwise_distance(output1, output2)
 
-            if label == 0:
-                plt.scatter(x, y, marker='.', color='c', s=10)
-                if euclidean_distance < 2:
-                    # print(img_str0, img_str1, euclidean_distance)
-                    pathname = "same_euclidean_true/" + str((i + 1) * (k + 1)) + "+" + str(y) + "/"
-                    if not os.path.exists(pathname):
-                        os.makedirs(pathname)
-                    img0.save(pathname + "1.png")
-                    img1.save(pathname + "2.png")
-                else:
-                    pathname = "same_euclidean_false/" + str((i + 1) * (k + 1)) + "+" + str(y) + "/"
-                    if not os.path.exists(pathname):
-                        os.makedirs(pathname)
-                    img0.save(pathname + "1.png")
-                    img1.save(pathname + "2.png")
+        x = 3 * np.random.rand(1)
+        y = euclidean_distance.item()
 
-            elif label == 1:
-                plt.scatter(x, y, marker='.', color='r', s=10)
-                if euclidean_distance < 2:
-                    # print(img_str0, img_str1, euclidean_distance)
-                    pathname = "diff_euclidean_false/" + str((i + 1) * (k + 1)) + "+" + str(y) + "/"
-                    if not os.path.exists(pathname):
-                        os.makedirs(pathname)
-                    img0.save(pathname + "1.png")
-                    img1.save(pathname + "2.png")
-                else:
-                    pathname = "diff_euclidean_true/" + str((i + 1) * (k + 1)) + "+" + str(y) + "/"
-                    if not os.path.exists(pathname):
-                        os.makedirs(pathname)
-                    img0.save(pathname + "1.png")
-                    img1.save(pathname + "2.png")
+        img0 = transforms.ToPILImage()(x0.squeeze(0))
+        img1 = transforms.ToPILImage()(x1.squeeze(0))
+
+        label = check_label(img0_path, img1_path)
+        if label == 0:
+            plt.scatter(x, y, marker='.', color='c', s=10)
+            if euclidean_distance < 2:
+                save_image_pair("same_euclidean_true/", img0, img1, index, y)
+            else:
+                save_image_pair("same_euclidean_false/", img0, img1, index, y)
+        elif label == 1:
+            plt.scatter(x, y, marker='.', color='r', s=10)
+            if euclidean_distance < 2:
+                save_image_pair("diff_euclidean_false/", img0, img1, index, y)
+            else:
+                save_image_pair("diff_euclidean_true/", img0, img1, index, y)
 
     plt.savefig(figname)
     plt.show()
 
+
+def save_image_pair(folder_name, img0, img1, index, y):
+    pathname = folder_name + str(y) + "+" + str(index + 1) + "/"
+    if not os.path.exists(pathname):
+        os.makedirs(pathname)
+    img0.save(pathname + "1.png")
+    img1.save(pathname + "2.png")
+
+
+def check_label(img0_path, img1_path):
+    category0 = extract_category(img0_path)
+    category1 = extract_category(img1_path)
+    return category0 == category1
+
+
+def extract_category(img_path):
+    index0 = img_path.find("mix_train") + 10
+    index1 = img_path.find("\\")
+
+    category = img_path[index0: index1]
+
+    return category
 
 # ===============================ApplyPhish=========================================
 def ApplyPhish(net):
@@ -192,6 +246,6 @@ def ApplyPhish(net):
 
 
 if __name__ == '__main__':
-    net = Train()
-    ScatterVisualization(net, "train", 3)
+    net, dict_img, dict_freq, dict_pair = Train()
+    ScatterVisualization(net, dict_img, dict_pair, "train", 3)
     # ScatterVisualization(net, "test", 30)
