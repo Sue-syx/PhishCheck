@@ -22,7 +22,7 @@ def Statistics(path):
     return dirname_, len(dirnames)
 
 if __name__ == '__main__': 
-    dir_, count = Statistics("./Database")
+    dir_, count = Statistics("D:/yuxuan1/phishwebsGet/Database")
     fileObject = open('TargetList.txt', 'w')
     for tar in dir_:
         tar = str(tar)
@@ -39,5 +39,5 @@ if __name__ == '__main__':
         tarcount.append(d[1])
     plt.figure()
     plt.bar(range(len(tarcount)), tarcount, tick_label=tarname)
+    plt.savefig("PhishingWebs.png")
     plt.show()
-    
