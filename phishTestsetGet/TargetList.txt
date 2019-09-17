@@ -1,5 +1,4 @@
 'PayPal Inc.', 3482
-'Webmail Providers', 3306
 'Bank of America', 1959
 'Office365', 1496
 'DHL Airways/ Inc.', 1251
